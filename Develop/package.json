@@ -1,0 +1,31 @@
+{
+  "name": "note-taker",
+  "version": "1.0.0",
+  "description": "An application that can be used to write, save, and delete notes. This application will use an express backend and save and retrieve note data from a JSON file.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dean Warren",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "path": "^0.12.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deawar/noteTaker.git"
+  },
+  "keywords": [
+    "express",
+    "JSON"
+  ],
+  "bugs": {
+    "url": "https://github.com/deawar/noteTaker/issues"
+  },
+  "homepage": "https://github.com/deawar/noteTaker#readme",
+  "devDependencies": {
+    "jest": "^26.0.1"
+  }
+}
