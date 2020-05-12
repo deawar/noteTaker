@@ -3,10 +3,22 @@
 // We are linking our routes to a series of "data" sources.
 // These data sources hold arrays of information on note-data, etc.
 // ===============================================================================
-
+let notesJSON = [];
 let notesData = require("../db/db");
+let notesPath = "../Develop/db/db.json";
 const fs = require('fs');
 //var waitListData = require("../data/waitinglistData");
+
+// ===============================================================================
+// WRITE TO DB
+// ===============================================================================
+
+function writeToFile (notesPath, notesJSON) {
+     fs.writeFile(notesPath, notesJSON, 'UTF-8', function (err) {
+            if (err) return console.log(err);
+        
+    });
+}
 
 
 // ===============================================================================
@@ -20,7 +32,9 @@ module.exports = function (app) {
 
     app.get("/api/notes", function (req, res) {
         console.log("Just sent a route to app.get /api/notes");
+        //res.writeHead(200, { 'Content-Type': 'application/json' });
         res.json(notesData);
+        res.end();
     });
 
     //   app.get("/api/waitlist", function(req, res) {
@@ -42,32 +56,16 @@ module.exports = function (app) {
         // req.body is available since we're using the body parsing middleware
         if (req.method === 'POST') {
 
-            console.log("Received POST Request in apiRoutes");
-            res.writeHead(200, {
-                'Content-Type': 'application/json'
-            });
-            let body = '';
-            req.on('data', function (data) {
-                body += data;
-            });
+            let newNote = req.body;
+            console.log("Received POST Request in apiRoutes New Note: ", newNote);
+            notesData.push(newNote);
+            console.log("Line 66 apiRoutes just pushed body onto notesJSON: ",notesData);
+            res.json(newNote);
+            notesJSON = JSON.stringify(notesData);
+            console.log("Line 69 apiRoutes notesJSON Stringified: ",notesJSON);
+            console.log("Line 70 apiRoutes notesData: ",notesData);
+            writeToFile (notesPath, notesJSON);
             res.on('end', function () {
-
-                fs.readFile('../db/db.json', function (err, notesJSON) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    let notes = JSON.parse([notesJSON]);
-                    let newNotes = JSON.parse(body);
-                    notes.note.push(newNotes);
-                    notesJSON = JSON.stringify(notes);
-
-
-                    fs.writeFile('db.json', notesJSON, function (err) {
-                        if (err) {
-                            console.log(err);
-                        }
-                    })
-                });
             })
         }
      
@@ -82,8 +80,8 @@ module.exports = function (app) {
 
 app.post("/api/clear", function (req, res) {
     // Empty out the arrays of data
-    tableData.length = 0;
-    waitListData.length = 0;
+    notesData.length = 0;
+    
 
     res.json({ ok: true });
 });
