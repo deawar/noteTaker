@@ -4,7 +4,8 @@ const app = express();
 //const path = require("path");
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3080;
-
+var proc = require('process');
+let PID = proc.pid;
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -30,5 +31,7 @@ app.get("*", function(req, res) {
 
 // start the server
 app.listen(port, function() {
-    console.log('Server started!\nListening at http://localhost:' + port);
+    if (PID){
+      console.log("Server up at PID: " + PID + "\nListening at http://localhost: " + port);
+      }
 });

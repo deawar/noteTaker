@@ -16,7 +16,6 @@ const fs = require('fs');
 function writeToFile (notesPath, notesJSON) {
      fs.writeFile(notesPath, notesJSON, 'UTF-8', function (err) {
             if (err) return console.log(err);
-        
     });
 }
 
@@ -56,21 +55,37 @@ module.exports = function (app) {
         // req.body is available since we're using the body parsing middleware
         if (req.method === 'POST') {
 
-            let newNote = req.body;
+            let newNote = req.body; //Incoming Note
             console.log("Received POST Request in apiRoutes New Note: ", newNote);
-            notesData.push(newNote);
+            notesData.push(newNote); //Add new Note to existing Notes
             console.log("Line 66 apiRoutes just pushed body onto notesJSON: ",notesData);
             res.json(newNote);
-            notesJSON = JSON.stringify(notesData);
+            notesJSON = JSON.stringify(notesData); //stringify new collection of notes
             console.log("Line 69 apiRoutes notesJSON Stringified: ",notesJSON);
             console.log("Line 70 apiRoutes notesData: ",notesData);
-            writeToFile (notesPath, notesJSON);
-            res.on('end', function () {
-            })
+            writeToFile (notesPath, notesJSON); //pass newly built collection of stringified notes to writeFile function
+            res.end(true)
         }
-     
         else {
-            res.json(false);
+            res.end(false);
+        }
+    });
+
+
+    app.delete("/api/notes/:id" , function (req, res) {
+        if (req.method === 'DELETE') {
+            let noteId = req.body;
+            console.log("Id of note to be deleted is: ", noteId);
+
+            for (let i = 0; i < notesData.length; i++) {
+                if (noteData[i] === noteId) {
+                    noteData.splice(i, 1);
+                }
+            }
+            notesJSON = JSON.stringify(notesData);
+            writeToFile (notesPath, notesJSON); //pass newly built collection of stringified notes to writeFile function
+            res.status(200).send(deletedNote)
+            res.end(true)
         }
     });
 
@@ -78,11 +93,11 @@ module.exports = function (app) {
 // I added this below code so you could clear out the table while working with the functionality.
 // Don"t worry about it!
 
-app.post("/api/clear", function (req, res) {
-    // Empty out the arrays of data
-    notesData.length = 0;
-    
+    app.post("/api/clear", function (req, res) {
+        // Empty out the arrays of data
+        notesData.length = 0;
+        
 
-    res.json({ ok: true });
-});
+        res.json({ ok: true });
+    });
 };
