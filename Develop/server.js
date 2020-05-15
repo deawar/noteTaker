@@ -1,7 +1,8 @@
 // grab the packages we need
 const express = require('express');
 const app = express();
-//const path = require("path");
+const chalk = require('chalk');
+const log = console.log;
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3080;
 var proc = require('process');
@@ -32,6 +33,6 @@ app.get("*", function(req, res) {
 // start the server
 app.listen(port, function() {
     if (PID){
-      console.log("Server up at PID: " + PID + "\nListening at http://localhost: " + port);
+      log(chalk.greenBright("Server up at PID: " + chalk.blue(PID) + "\nListening at http://localhost: " + chalk.yellow(port)));
       }
 });
