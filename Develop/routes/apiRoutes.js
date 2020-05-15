@@ -4,6 +4,9 @@
 // These data sources hold arrays of information on note-data, etc.
 // ===============================================================================
 let notesJSON = [];
+const chalk = require('chalk');
+const log = console.log;
+const bodyParser = require('body-parser');
 let notesData = require("../db/db");
 let notesPath = "../Develop/db/db.json";
 const fs = require('fs');
@@ -30,7 +33,7 @@ module.exports = function (app) {
     // ---------------------------------------------------------------------------
 
     app.get("/api/notes", function (req, res) {
-        console.log("Just sent a route to app.get /api/notes");
+        log(chalk.blue("Just sent a route to app.get /api/notes"));
         //res.writeHead(200, { 'Content-Type': 'application/json' });
         res.json(notesData);
         res.end();
@@ -56,13 +59,12 @@ module.exports = function (app) {
         if (req.method === 'POST') {
 
             let newNote = req.body; //Incoming Note
-            console.log("Received POST Request in apiRoutes New Note: ", newNote);
             notesData.push(newNote); //Add new Note to existing Notes
-            console.log("Line 66 apiRoutes just pushed body onto notesJSON: ",notesData);
+            
             res.json(newNote);
             notesJSON = JSON.stringify(notesData); //stringify new collection of notes
-            console.log("Line 69 apiRoutes notesJSON Stringified: ",notesJSON);
-            console.log("Line 70 apiRoutes notesData: ",notesData);
+            log(chalk.blue("Line 66 apiRoutes notesJSON Stringified: ",notesJSON));
+            
             writeToFile (notesPath, notesJSON); //pass newly built collection of stringified notes to writeFile function
             res.end(true)
         }
@@ -74,14 +76,28 @@ module.exports = function (app) {
 
     app.delete("/api/notes/:id" , function (req, res) {
         if (req.method === 'DELETE') {
-            let noteId = req.body;
-            console.log("Id of note to be deleted is: ", noteId);
+            let noteId = req.params.id;
+            log(chalk.greenBright("**Line 81** Trying to see what comes back:",req.params.id));
+            log(chalk.yellowBright("**Line 82** Id of note to be deleted is: ", noteId));
+            fs.readFile(notesPath, (err, data) => {
+                if (err) {
+                  console.error(err)
+                  return
+                }
+                notesData = JSON.parse(data);
+                log(chalk.red("**Line 89** JSON File pre delete:", notesJSON));
+                log(chalk.red("**Line 90** db.json Length:", notesData.length));
+              })
 
             for (let i = 0; i < notesData.length; i++) {
-                if (noteData[i] === noteId) {
-                    noteData.splice(i, 1);
+                if (notesData[i].id === noteId) {
+                    log(chalk.yellow("---line 95--- ",notesJSON.id))
+                    notesData.splice(i, 1);
+                    log(chalk.yellow("Line 87 --Item #" + i + " " + notesData[i]))
                 }
             }
+            log(chalk.red("--Line 99---JSON File post delete:", notesData));
+            let deletedNote = true
             notesJSON = JSON.stringify(notesData);
             writeToFile (notesPath, notesJSON); //pass newly built collection of stringified notes to writeFile function
             res.status(200).send(deletedNote)

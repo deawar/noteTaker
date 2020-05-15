@@ -3,7 +3,7 @@ var $noteText = $(".note-textarea");
 var $saveNoteBtn = $(".save-note");
 var $newNoteBtn = $(".new-note");
 var $noteList = $(".list-container .list-group");
-
+var $noteId;
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
 
@@ -26,7 +26,7 @@ var saveNote = function(note) {
 
 // A function for deleting a note from the db
 var deleteNote = function(id) {
-  console.log ("ID of item to be deleted: ", id);
+  console.log ("Line 29 ID of item to be deleted: ", activeNote);
   return $.ajax({
     url: "api/notes/" + id,
     method: "DELETE"
@@ -40,19 +40,25 @@ var renderActiveNote = function() {
   if (activeNote.id) {
     $noteTitle.attr("readonly", true);
     $noteText.attr("readonly", true);
+    //$noteId.attr("readonly", true);
     $noteTitle.val(activeNote.title);
     $noteText.val(activeNote.text);
+    //$noteId.val(activeNote.id);
   } else {
     $noteTitle.attr("readonly", false);
     $noteText.attr("readonly", false);
+    //$noteId.attr("readonly", false);
     $noteTitle.val("");
     $noteText.val("");
+    //$noteId.val("");
   }
 };
 
 // Get the note data from the inputs, save it to the db and update the view
 var handleNoteSave = function() {
+  let $noteId =  Date.now();
   var newNote = {
+    id: $noteId,
     title: $noteTitle.val(),
     text: $noteText.val()
   };
@@ -71,7 +77,8 @@ var handleNoteDelete = function(event) {
   var note = $(this)
     .parent(".list-group-item")
     .data();
-    console.log("--->NoteID to be deleted: ", note.id);
+    console.log("--->NoteID to be deleted: ",activeNote);
+    console.log("***###LINE 75###--->note to be deleted: ",note.id);
   if (activeNote.id === note.id) {
     activeNote = {};
   }
@@ -114,15 +121,14 @@ var renderNoteList = function(notes) {
     var note = notes[i];
     var $li = $("<li class='list-group-item'>");
     $li.data(note);
+    console.log("Line 118*****---->noteListItems: ",note);
     var $span = $("<span>").text(note.title);
     var $delBtn = $(
-      "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
+      `<i class='fas fa-trash-alt float-right text-danger delete-note' data-id=${note.id}>`
     );
-
     $li.append($span, $delBtn);
     noteListItems.push($li);
   }
-
   $noteList.append(noteListItems);
 };
 
