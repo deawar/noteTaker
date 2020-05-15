@@ -2,7 +2,7 @@
  ## Badges  
 [![GitHub issues](https://img.shields.io/github/issues/deawar/noteTaker?style=plastic)](undefined/network)[![GitHub forks](https://img.shields.io/github/forks/deawar/noteTaker?style=plastic)](undefined/network)[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg?style=plastic)](code_of_conduct.md) 
 
-![demo.gif](https://github.com/deawar/noteTaker/noteTaker.gif)
+![demo.gif](https://github.com/deawar/noteTaker/blob/master/Develop/public/assets/noteTaker.gif)
 ## Description  
   An application that can be used to write, save, and delete notes. This application will use an express backend and save and retrieve note data from a JSON file.  
 * [Installation](#installation)  
