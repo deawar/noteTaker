@@ -12,7 +12,8 @@ let notesData = require("../db/db");
 let notesPath = "../Develop/db/db.json";
 const fs = require('fs');
 const app = express();
-app.use(express.static('public'))
+app.use(express.static('public'));
+//app.use(express.static('Develop'));
 // ===============================================================================
 // WRITE TO DB
 // ===============================================================================
