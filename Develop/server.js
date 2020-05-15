@@ -1,4 +1,5 @@
 // grab the packages we need
+
 const express = require('express');
 const app = express();
 const chalk = require('chalk');
@@ -10,7 +11,7 @@ let PID = proc.pid;
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-app.use(express.static('public')); // to use static assets in the "Public" directory
+app.use("/public",express.static(__dirname + "/public")); // to use static assets in the "Public" directory
 
 
 require("./routes/apiRoutes")(app);

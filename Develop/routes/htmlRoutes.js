@@ -3,7 +3,12 @@
 // We need to include the path package to get the correct file path for our html
 // ===============================================================================
 const path = require("path");
-
+express = require('express');
+app = express();
+bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(express.static('public')); // to use static assets in the "Public" directory
 
 // ===============================================================================
 // ROUTING

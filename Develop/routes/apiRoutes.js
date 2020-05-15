@@ -3,6 +3,7 @@
 // We are linking our routes to a series of "data" sources.
 // These data sources hold arrays of information on note-data, etc.
 // ===============================================================================
+const express = require('express');
 let notesJSON = [];
 const chalk = require('chalk');
 const log = console.log;
@@ -10,12 +11,11 @@ const bodyParser = require('body-parser');
 let notesData = require("../db/db");
 let notesPath = "../Develop/db/db.json";
 const fs = require('fs');
-//var waitListData = require("../data/waitinglistData");
-
+const app = express();
+app.use(express.static('public'))
 // ===============================================================================
 // WRITE TO DB
 // ===============================================================================
-
 function writeToFile (notesPath, notesJSON) {
      fs.writeFile(notesPath, notesJSON, 'UTF-8', function (err) {
             if (err) return console.log(err);
@@ -96,7 +96,7 @@ module.exports = function (app) {
                     log(chalk.yellow("Line 87 --Item #" + i + " " + notesData[i]))
                 }
             }
-            log(chalk.red("--Line 99---JSON File post delete:", notesData));
+            log(chalk.red("--Line 99---JSON File post delete:", notesJSON));
             let deletedNote = true
             notesJSON = JSON.stringify(notesData);
             writeToFile (notesPath, notesJSON); //pass newly built collection of stringified notes to writeFile function

@@ -1,3 +1,5 @@
+//Frontend JS file to handle buttons -save, delete and add
+
 var $noteTitle = $(".note-title");
 var $noteText = $(".note-textarea");
 var $saveNoteBtn = $(".save-note");
