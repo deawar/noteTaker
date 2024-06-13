@@ -28,6 +28,6 @@
   },
   "homepage": "https://github.com/deawar/noteTaker#readme",
   "devDependencies": {
-    "jest": "^26.0.1"
+    "jest": "^29.7.0"
   }
 }
